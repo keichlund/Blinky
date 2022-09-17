@@ -119,8 +119,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-  MX_USB_HOST_Process();
-
+    MX_USB_HOST_Process();
+    
     /* USER CODE BEGIN 3 */
     UI_Run();
     
@@ -129,8 +129,8 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
+* @brief System Clock Configuration
+* @retval None
   */
 void SystemClock_Config(void)
 {
