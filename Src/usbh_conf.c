@@ -22,7 +22,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usbh_core.h"
 #include "usbh_platform.h"
-#include "hardware.h"
 
 /* USER CODE BEGIN Includes */
 
