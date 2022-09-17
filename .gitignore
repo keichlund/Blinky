@@ -25,3 +25,7 @@
 *.ewd
 EWARM/settings/
  
+EWARM/Blinky/.ninja_deps
+EWARM/Blinky/.ninja_log
+EWARM/Blinky/BrowseInfo/Application/User/main.pbi.dep
+EWARM/Blinky/Exe/Blinky.hex
