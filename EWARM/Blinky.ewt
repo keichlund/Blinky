@@ -1432,12 +1432,6 @@
             </file>
         </group>
         <group>
-            <name>Headers</name>
-            <file>
-                <name>$PROJ_DIR$\..\Inc\UI.h</name>
-            </file>
-        </group>
-        <group>
             <name>User</name>
             <file>
                 <name>$PROJ_DIR$\..\Src\main.c</name>
