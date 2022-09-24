@@ -44,7 +44,6 @@ void DebounceButton(void)
     if( (nowTick - stateChangeTick) >= DEBOUNCE_DELAY_MS)
     {
       ButtonStateDebounced = ButtonStateRaw;
-      HAL_GPIO_TogglePin(LD6_GPIO_Port, LD6_Pin);
     }
   }
 }
@@ -54,6 +53,7 @@ void UI_Init(void)
 {
   HAL_GPIO_WritePin(LD4_GPIO_Port, LD4_Pin, GPIO_PIN_SET);
   HAL_GPIO_WritePin(LD5_GPIO_Port, LD5_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LD6_GPIO_Port, LD6_Pin, GPIO_PIN_RESET);
 }
 
 void UI_Run(void)
