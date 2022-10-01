@@ -5,9 +5,6 @@
 
 /* Exported Functions */
 
-/* Init function for the user interface module */
-void UI_Init(void);
-
 /* Run function for the user interface module */
 void UI_Run(void);
 
