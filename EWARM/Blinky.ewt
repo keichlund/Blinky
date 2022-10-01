@@ -1434,6 +1434,18 @@
         <group>
             <name>User</name>
             <file>
+                <name>$PROJ_DIR$\..\Src\conioCompat.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Src\console.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Src\consoleCommands.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Src\consoleIo.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Src\main.c</name>
             </file>
             <file>
@@ -1444,15 +1456,6 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Src\UI.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Src\usb_host.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Src\usbh_conf.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Src\usbh_platform.c</name>
             </file>
         </group>
     </group>
@@ -1494,19 +1497,10 @@
                 <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_hcd.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2s.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2s_ex.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c</name>
@@ -1536,28 +1530,7 @@
                 <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c</name>
-            </file>
-        </group>
-    </group>
-    <group>
-        <name>Middlewares</name>
-        <group>
-            <name>USB_Host_Library</name>
-            <file>
-                <name>$PROJ_DIR$\..\Middlewares\ST\STM32_USB_Host_Library\Class\CDC\Src\usbh_cdc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_core.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_ctlreq.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_ioreq.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_pipes.c</name>
+                <name>$PROJ_DIR$\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c</name>
             </file>
         </group>
     </group>
