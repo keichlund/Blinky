@@ -3,44 +3,40 @@
 
 #include "consoleIo.h"
 #include <stdio.h>
+#include "stdint.h"
+#include "stm32f4xx_hal.h"
+#include "main.h"
 
-//use the windows conio.h for kbhit, or a POSIX reproduction
-#ifdef _WIN32
-#include <conio.h>
-#else
-#include "conioCompat.h"
-#endif
-
-static int getch_noblock() {
-    if (_kbhit())
-        return _getch();
-    else
-        return EOF;
-}
 
 eConsoleError ConsoleIoInit(void)
 {
 	return CONSOLE_SUCCESS;
 }
+
 eConsoleError ConsoleIoReceive(uint8_t *buffer, const uint32_t bufferLength, uint32_t *readLength)
 {
 	uint32_t i = 0;
-	char ch;
-	
-	ch = getch_noblock();
-	while ( ( EOF != ch ) && ( i < bufferLength ) )
-	{
-		buffer[i] = (uint8_t) ch;
-		i++;
-		ch = getch_noblock();
-	}
+	uint8_t in = 0;
+  
+	if(HAL_UART_Receive(GetUART1Handle(), &in, 1, 255) == HAL_OK)
+  {
+    while ( (in != '\r') || ( i < bufferLength ) )
+    {
+      buffer[i] = in;
+      i++;
+      if( HAL_UART_Receive(GetUART1Handle(), &in, 1, 255) != HAL_OK)
+      {
+        break;
+      }
+    }
+  }
 	*readLength = i;
 	return CONSOLE_SUCCESS;
 }
 
 eConsoleError ConsoleIoSendString(const char *buffer)
 {
-	printf("%s", buffer);
+	HAL_UART_Transmit(GetUART1Handle(), (uint8_t *)buffer, 100,20);
 	return CONSOLE_SUCCESS;
 }
 
