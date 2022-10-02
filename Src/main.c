@@ -101,10 +101,6 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   ConsoleInit();
-  
-  uint8_t buf[100] = {0};
-  uint8_t i = 0;
-  uint16_t len = 1;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -115,19 +111,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     UI_Run();
-    //ConsoleProcess();
-    if( HAL_UART_Receive(&huart2, &buf[i], len, 250) == HAL_OK)
-    {
-      i++;
-      if(i >= 99)
-      {
-        i = 0;
-      }
-      if(buf[i-1] == '\r')
-      {
-        buf[i-1] = '\n';
-      }
-    }
+    ConsoleProcess();
   }
   /* USER CODE END 3 */
 }

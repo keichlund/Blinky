@@ -6,6 +6,7 @@
 #include "stdint.h"
 #include "stm32f4xx_hal.h"
 #include "main.h"
+#include <string.h>
 
 
 eConsoleError ConsoleIoInit(void)
@@ -18,17 +19,10 @@ eConsoleError ConsoleIoReceive(uint8_t *buffer, const uint32_t bufferLength, uin
 	uint32_t i = 0;
 	uint8_t in = 0;
   
-	if(HAL_UART_Receive(GetUART1Handle(), &in, 1, 255) == HAL_OK)
+	if(HAL_UART_Receive(GetUART1Handle(), &in, 1, 20) == HAL_OK)
   {
-    while ( (in != '\r') || ( i < bufferLength ) )
-    {
       buffer[i] = in;
       i++;
-      if( HAL_UART_Receive(GetUART1Handle(), &in, 1, 255) != HAL_OK)
-      {
-        break;
-      }
-    }
   }
 	*readLength = i;
 	return CONSOLE_SUCCESS;
@@ -36,7 +30,7 @@ eConsoleError ConsoleIoReceive(uint8_t *buffer, const uint32_t bufferLength, uin
 
 eConsoleError ConsoleIoSendString(const char *buffer)
 {
-	HAL_UART_Transmit(GetUART1Handle(), (uint8_t *)buffer, 100,20);
+	HAL_UART_Transmit(GetUART1Handle(), (uint8_t *)buffer, strlen(buffer), 250);
 	return CONSOLE_SUCCESS;
 }
 
