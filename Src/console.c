@@ -14,6 +14,7 @@
 #define NOT_FOUND		-1
 #define INT16_MAX_STR_LENGTH 8 // -65534: six characters plus a two NULLs
 #define INT32_MAX_STR_LENGTH 16
+#define UINT32_MAX_STR_LENGTH 12
 #define NULL_CHAR            '\0'
 #define CR_CHAR              '\r'
 #define LF_CHAR              '\n'
@@ -334,6 +335,37 @@ eCommandResult_T ConsoleSendParamHexUint8(uint8_t parameterUint8)
 	return COMMAND_SUCCESS;
 }
 
+eCommandResult_T ConsoleReceiveParamUInt32(const char * buffer, const uint8_t parameterNumber, uint32_t* parameterUInt32)
+{
+	uint32_t startIndex = 0;
+	uint32_t i;
+	eCommandResult_T result;
+	char charVal;
+	char str[UINT32_MAX_STR_LENGTH];
+
+	result = ConsoleParamFindN(buffer, parameterNumber, &startIndex);
+
+	i = 0;
+	charVal = buffer[startIndex + i];
+	while ( ( LF_CHAR != charVal ) && ( CR_CHAR != charVal )
+			&& ( PARAMETER_SEPARATER != charVal )
+		&& ( i < UINT32_MAX_STR_LENGTH ) )
+	{
+		str[i] = charVal;					// copy the relevant part
+		i++;
+		charVal = buffer[startIndex + i];
+	}
+	if ( i == UINT32_MAX_STR_LENGTH)
+	{
+		result = COMMAND_PARAMETER_ERROR;
+	}
+	if ( COMMAND_SUCCESS == result )
+	{
+		str[i] = NULL_CHAR;
+		*parameterUInt32 = strtoul(str,NULL, 10);
+	}
+	return result;
+}
 
 #if CONSOLE_USE_BUILTIN_ITOA
 #define itoa smallItoa

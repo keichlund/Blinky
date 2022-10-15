@@ -12,6 +12,8 @@
 #include "consoleIo.h"
 #include "version.h"
 
+#include "UI.h"
+
 #define IGNORE_UNUSED_VARIABLE(x)     if ( &x == &x ) {}
 
 static eCommandResult_T ConsoleCommandComment(const char buffer[]);
@@ -19,6 +21,8 @@ static eCommandResult_T ConsoleCommandVer(const char buffer[]);
 static eCommandResult_T ConsoleCommandHelp(const char buffer[]);
 static eCommandResult_T ConsoleCommandParamExampleInt16(const char buffer[]);
 static eCommandResult_T ConsoleCommandParamExampleHexUint16(const char buffer[]);
+static eCommandResult_T ConsoleCommandSetBagVolume(const char buffer[]);
+static eCommandResult_T ConsoleCommandGetBagFullVolume(const char buffer[]);
 
 static const sConsoleCommandTable_T mConsoleCommandTable[] =
 {
@@ -27,6 +31,8 @@ static const sConsoleCommandTable_T mConsoleCommandTable[] =
     {"ver", &ConsoleCommandVer, HELP("Get the version string")},
     {"int", &ConsoleCommandParamExampleInt16, HELP("How to get a signed int16 from params list: int -321")},
     {"u16h", &ConsoleCommandParamExampleHexUint16, HELP("How to get a hex u16 from the params list: u16h aB12")},
+    {"set bag volume", &ConsoleCommandSetBagVolume, HELP("{mL} - sets new total bag volume")},
+    {"full volume?", &ConsoleCommandGetBagFullVolume, HELP("Prints the bag full volume setting")},
 
 	CONSOLE_COMMAND_TABLE_END // must be LAST
 };
@@ -75,6 +81,7 @@ static eCommandResult_T ConsoleCommandParamExampleInt16(const char buffer[])
 	}
 	return result;
 }
+
 static eCommandResult_T ConsoleCommandParamExampleHexUint16(const char buffer[])
 {
 	uint16_t parameterUint16;
@@ -87,6 +94,30 @@ static eCommandResult_T ConsoleCommandParamExampleHexUint16(const char buffer[])
 		ConsoleIoSendString(STR_ENDLINE);
 	}
 	return result;
+}
+
+static eCommandResult_T ConsoleCommandSetBagVolume(const char buffer[])
+{
+  uint32_t newVolume = 0u;
+  eCommandResult_T result;
+  uint8_t paramIndex = strlen("set bag volume");
+  result = ConsoleReceiveParamUInt32(&buffer[paramIndex], 1, &newVolume);
+  UI_SetBagFullVolume(newVolume);
+  ConsoleIoSendString("New Bag Full Volume: ");
+  ConsoleSendParamInt16((int16_t) newVolume);
+  ConsoleIoSendString("mL\r\n");
+  return result;
+}
+
+static eCommandResult_T ConsoleCommandGetBagFullVolume(const char buffer[])
+{
+  eCommandResult_T result = COMMAND_SUCCESS;
+  uint32_t volume = UI_GetBagFullVolume();
+  ConsoleIoSendString("Bag Full Volume: ");
+  ConsoleSendParamInt16((int16_t) volume);
+  ConsoleIoSendString("mL\r\n");
+
+  return result;
 }
 
 static eCommandResult_T ConsoleCommandVer(const char buffer[])

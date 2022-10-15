@@ -9,6 +9,8 @@
 
 #define LED_BLINK_DELAY_MS      500
 
+uint32_t BagFullVolumeML = 100;
+
 /* Exported Functions */
 
 void UI_Run(void)
@@ -30,4 +32,14 @@ void UI_Run(void)
  {
    HAL_GPIO_WritePin(LD4_GPIO_Port, LD4_Pin, GPIO_PIN_RESET);
  }
+}
+
+void UI_SetBagFullVolume(uint32_t newVolume)
+{
+  BagFullVolumeML = newVolume;
+}
+
+uint32_t UI_GetBagFullVolume(void)
+{
+  return BagFullVolumeML;
 }
