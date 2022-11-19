@@ -50,6 +50,8 @@ extern "C" {
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -58,6 +60,10 @@ UART_HandleTypeDef * GetUART1Handle(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define Hx711_sck_Pin GPIO_PIN_6
+#define Hx711_sck_GPIO_Port GPIOC
+#define hx711_dat_Pin GPIO_PIN_8
+#define hx711_dat_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
