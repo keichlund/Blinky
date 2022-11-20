@@ -1,6 +1,8 @@
 // File: hx711.h.c
 
 #include "hx711.h"
+#include "consoleIo.h"
+#include "console.h"
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_def.h"
 #include "stdint.h"
@@ -24,25 +26,73 @@ void hx711_Init(void)
 
 void hx711_Run(void)
 {
-  if(HAL_GPIO_ReadPin(hx711_Dat_GPIO_Port, hx711_Dat_Pin) == GPIO_PIN_RESET)
+  static uint32_t sampleTick = 0;
+  static uint32_t zero = 0;
+  static uint8_t avgCnt = 0;
+  uint8_t data[3];
+  uint8_t filler = 0x00;
+  uint32_t value = 0;
+  int32_t correctedValue = 0;
+  
+  
+  if( HAL_GetTick() - sampleTick >= 5)
   {
-    for( uint8_t i = 0; i < 26; i++)
+    if(HAL_GPIO_ReadPin(hx711_Dat_GPIO_Port, hx711_Dat_Pin) == GPIO_PIN_RESET)
     {
+      for( uint8_t j = 0; j < 3; j++)
+      {
+        for( uint8_t i = 0; i < 8; i++)
+        {
+          HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_SET);
+          DWT_Delay_us(1);
+          data[j] |= HAL_GPIO_ReadPin(hx711_Dat_GPIO_Port, hx711_Dat_Pin) << (i);
+          HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_RESET);
+          DWT_Delay_us(1);
+        }
+      }
+      
       HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_SET);
       DWT_Delay_us(1);
-      buf[i] = HAL_GPIO_ReadPin(hx711_Dat_GPIO_Port, hx711_Dat_Pin);
       HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_RESET);
       DWT_Delay_us(1);
+//      HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_SET);
+//      DWT_Delay_us(1);
+//      HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_RESET);
+//      DWT_Delay_us(1);
+//      HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_SET);
+//      DWT_Delay_us(1);
+//      HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_RESET);
+//      DWT_Delay_us(1);
+      
+      ConsoleSendParamInt16(data[0]);
+      ConsoleIoSendString(", ");
+      ConsoleSendParamInt16(data[1]);
+      ConsoleIoSendString(", ");
+      ConsoleSendParamInt16(data[2]);
+      ConsoleIoSendString(", ");
+      
+      value = (uint32_t)data[0] << 16 | (uint32_t)data[1] << 8| (uint32_t)data[2] << 0;
+      ConsoleSendParamUInt32(value);
+      ConsoleSendString(",");
+      correctedValue = value - zero;
+      ConsoleSendParamInt32(correctedValue);
+      ConsoleIoSendString("\r\n");
+      sampleTick = HAL_GetTick();
+      
+      if(avgCnt <20)
+      {
+        zero += value/20;
+        avgCnt++;
+      }
     }
-    i = 0;
+    HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_RESET);
   }
-  HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_RESET);
 }
 
 
 uint32_t DWT_Delay_Init(void);
- 
- 
+
+
  
 /**
  * @brief  This function provides a delay (in microseconds)

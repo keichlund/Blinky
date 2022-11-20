@@ -405,6 +405,34 @@ static void smallItoa(int in, char* outBuffer, int radix)
 }
 #endif
 
+#if CONSOLE_USE_BUILTIN_ITOA
+#define utoa smallUtoa
+// The C library itoa is sometimes a complicated function and the library costs aren't worth it
+// so this is implements the parts of the function needed for console.
+static void smallUtoa(uint32_t in, char* outBuffer, int radix)
+{
+	uint32_t tmpIn;
+	int stringLen = 1u; // it will be at least as long as the NULL character
+
+	tmpIn = in;
+	while (tmpIn/radix != 0) {
+		tmpIn = tmpIn/radix;
+		stringLen++;
+	}
+    
+    // Now fill it in backwards, starting with the NULL at the end
+    *(outBuffer + stringLen) = NULL_CHAR;
+    stringLen--;
+
+	tmpIn = in;
+	do {
+		*(outBuffer+stringLen) = (tmpIn%radix)+'0';
+		tmpIn =  tmpIn / radix;
+	} while(stringLen--);
+
+}
+#endif
+
 // ConsoleSendParamInt16
 // Send a parameter of type int16 using the (unsafe) C library function
 // itoa to translate from integer to string.
@@ -420,7 +448,7 @@ eCommandResult_T ConsoleSendParamInt16(int16_t parameterInt)
 }
 
 // ConsoleSendParamInt32
-// Send a parameter of type int16 using the (unsafe) C library function
+// Send a parameter of type int32 using the (unsafe) C library function
 // itoa to translate from integer to string.
 eCommandResult_T ConsoleSendParamInt32(int32_t parameterInt)
 {
@@ -432,6 +460,21 @@ eCommandResult_T ConsoleSendParamInt32(int32_t parameterInt)
 
 	return COMMAND_SUCCESS;
 }
+
+// ConsoleSendParamUInt32
+// Send a parameter of type uint32 using the (unsafe) C library function
+// itoa to translate from integer to string.
+eCommandResult_T ConsoleSendParamUInt32(uint32_t parameterInt)
+{
+	char out[INT32_MAX_STR_LENGTH];
+	memset(out, 0, sizeof(out));
+
+	utoa(parameterInt, out, 10);
+	ConsoleIoSendString(out);
+
+	return COMMAND_SUCCESS;
+}
+
 // ConsoleUtilHexCharToInt
 // Converts a single hex character (0-9,A-F) to an integer (0-15)
 static eCommandResult_T ConsoleUtilHexCharToInt(char charVal, uint8_t* pInt)

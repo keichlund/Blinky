@@ -15,7 +15,7 @@
 // The C library itoa is sometimes a complicated function and the library costs aren't worth it
 // so this is implements the parts of the function needed for console.
 #define CONSOLE_USE_BUILTIN_ITOA	1
-
+#define CONSOLE_USE_BUILTIN_UTOA  1
 
 // Salled from higher up areas of the code (main)
 void ConsoleInit(void);
@@ -36,6 +36,7 @@ typedef enum {
 eCommandResult_T ConsoleReceiveParamInt16(const char * buffer, const uint8_t parameterNumber, int16_t* parameterInt16);
 eCommandResult_T ConsoleSendParamInt16(int16_t parameterInt);
 eCommandResult_T ConsoleSendParamInt32(int32_t parameterInt);
+eCommandResult_T ConsoleSendParamUInt32(uint32_t parameterInt);
 eCommandResult_T ConsoleReceiveParamHexUint16(const char * buffer, const uint8_t parameterNumber, uint16_t* parameterUint16);
 eCommandResult_T ConsoleSendParamHexUint16(uint16_t parameterUint16);
 eCommandResult_T ConsoleSendParamHexUint8(uint8_t parameterUint8);
