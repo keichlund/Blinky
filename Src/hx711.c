@@ -9,13 +9,15 @@
 #include "main.h"
 
 /* Private Defines */
+#define CALIBRATION_FACTOR    -85
 
+/*Private Variables*/
 uint8_t buf[28];
 uint8_t i = 0;
 
+/* Private function prototypes*/
 __STATIC_INLINE void DWT_Delay_us(volatile uint32_t microseconds);
 uint32_t DWT_Delay_Init(void);
-
 
 /* Exported Functions */
 void hx711_Init(void)
@@ -45,7 +47,7 @@ void hx711_Run(void)
         {
           HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_SET);
           DWT_Delay_us(1);
-          data[j] |= HAL_GPIO_ReadPin(hx711_Dat_GPIO_Port, hx711_Dat_Pin) << (i);
+          data[j] |= HAL_GPIO_ReadPin(hx711_Dat_GPIO_Port, hx711_Dat_Pin) << (7-i);
           HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_RESET);
           DWT_Delay_us(1);
         }
@@ -55,14 +57,6 @@ void hx711_Run(void)
       DWT_Delay_us(1);
       HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_RESET);
       DWT_Delay_us(1);
-//      HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_SET);
-//      DWT_Delay_us(1);
-//      HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_RESET);
-//      DWT_Delay_us(1);
-//      HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_SET);
-//      DWT_Delay_us(1);
-//      HAL_GPIO_WritePin(hx711_SCK_GPIO_Port, hx711_SCK_Pin, GPIO_PIN_RESET);
-//      DWT_Delay_us(1);
       
       ConsoleSendParamInt16(data[0]);
       ConsoleIoSendString(", ");
@@ -76,7 +70,10 @@ void hx711_Run(void)
       ConsoleSendString(",");
       correctedValue = value - zero;
       ConsoleSendParamInt32(correctedValue);
+      ConsoleSendString(",");
+      ConsoleSendParamInt32(correctedValue/CALIBRATION_FACTOR);
       ConsoleIoSendString("\r\n");
+      
       sampleTick = HAL_GetTick();
       
       if(avgCnt <20)
