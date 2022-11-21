@@ -9,7 +9,7 @@
 
 #define LED_BLINK_DELAY_MS      500
 
-uint32_t BagFullVolumeML = 100;
+uint32_t BagFullVolumeML = 1000;
 
 /* Exported Functions */
 

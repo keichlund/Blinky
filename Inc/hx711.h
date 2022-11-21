@@ -7,6 +7,8 @@
 /* Exported Functions */
 
 /* Run function for the hx711 module */
-void hx711_Init();
+void hx711_Init(void);
 void hx711_Run(void);
+void hx711_Tare(void);
+int32_t hx711_GetWeight(void);
 #endif
