@@ -21,7 +21,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 static uint32_t TareValue = 0u;
-static uint16_t AvgSampleArray[SAMPLES_IN_AVERAGE];
+static uint32_t AvgSampleArray[SAMPLES_IN_AVERAGE];
 static uint32_t AvgAccumulator = 0;
 static uint16_t AvgIndex = 0;
 
@@ -35,6 +35,7 @@ uint32_t DWT_Delay_Init(void);
 uint32_t ReadRaw(uint8_t gain)
 {
   uint8_t data[3];
+  uint32_t val = 0;
   
   // 3 bytes of data
   for( uint8_t j = 0; j < 3; j++)
@@ -59,7 +60,8 @@ uint32_t ReadRaw(uint8_t gain)
     DWT_Delay_us(1);
   }
   
-  return((uint32_t)data[0] << 16 | (uint32_t)data[1] << 8| (uint32_t)data[2] << 0);
+  val = (uint32_t)data[0] << 16 | (uint32_t)data[1] << 8| (uint32_t)data[2] << 0;
+  return(val);
 }
 
 //New data is ready when the data line is low
